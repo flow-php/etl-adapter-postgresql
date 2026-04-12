@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Flow\ETL\Adapter\PostgreSql\Tests;
 
-use function Flow\PostgreSql\DSL\{pgsql_client, pgsql_connection_dsn};
+use function Flow\Bridge\PHPUnit\PostgreSQL\DSL\static_pgsql_client;
+use function Flow\PostgreSql\DSL\pgsql_connection_dsn;
 use Flow\ETL\Tests\FlowTestCase;
 use Flow\PostgreSql\Client\Client;
 
@@ -28,13 +29,6 @@ abstract class IntegrationTestCase extends FlowTestCase
             static::markTestSkipped('PGSQL_DATABASE_URL environment variable is not set');
         }
 
-        $this->client = pgsql_client(pgsql_connection_dsn($dsn));
-    }
-
-    protected function tearDown() : void
-    {
-        if (isset($this->client)) {
-            $this->client->close();
-        }
+        $this->client = static_pgsql_client(pgsql_connection_dsn($dsn));
     }
 }
